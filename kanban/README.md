@@ -34,3 +34,52 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+
+
+
+import {
+  QueryCache,
+  QueryClient,
+  QueryClientProvider,
+} from "@tanstack/react-query";
+import { PropsWithChildren } from "react";
+
+const queryClient = new QueryClient({
+  queryCache: new QueryCache({
+    onError(error) {
+      // TODO: Handle Authentication issue
+      if (error instanceof Error) {
+        console.error("Error in query", error.message);
+      }
+    },
+  }),
+});
+
+function ReactQueryProvider(props: PropsWithChildren) {
+  return (
+    <QueryClientProvider client={queryClient}>
+      {props.children}
+    </QueryClientProvider>
+  );
+}
+
+export default ReactQueryProvider;
+
+
+import { router } from "./routes/rootRoute";
+import ReactQueryProvider from "./services/ReactQueryProvider";
+import { RouterProvider } from "@tanstack/router";
+import { DirectusProvider } from "./services/directusClient"
+
+function App() {
+
+  return (
+    <DirectusProvider>
+      <ReactQueryProvider>
+        <RouterProvider router={router} />
+      </ReactQueryProvider>
+    </DirectusProvider>
+  );
+}
+
+export default App;
