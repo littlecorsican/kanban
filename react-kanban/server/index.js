@@ -1,6 +1,5 @@
 var express = require('express');
 var app = express();
-const models = require('./models/index')
 const router = express.Router()
 
 const userRoute=require('./routes/user')

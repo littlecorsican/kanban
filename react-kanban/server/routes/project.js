@@ -1,5 +1,6 @@
 const express=require('express')
 const router=express.Router()
+const models = require('../models/index')
 
 router.get('/', function (req, res) {
     models.Project.findAll().then((response)=>console.log(response))
