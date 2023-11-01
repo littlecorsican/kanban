@@ -1,8 +1,9 @@
+"use client"
+
 import { useRef, useEffect, useState } from "react";
-import { useNavigate } from "@tanstack/router";
+// import { useNavigate } from "@tanstack/router";
 import { z } from "zod";
 import { useMutation } from "@tanstack/react-query";
-import { useAuth } from "@/services/directusClient";
 
 interface LoginError {
   errors: {
@@ -10,25 +11,25 @@ interface LoginError {
   }[]
 }
 
-export const LoginPage = () => {
-  const { login, isLoggedIn } = useAuth();
+export default function LoginPage() {
 
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const user_password = useRef<HTMLInputElement>(null);
   const user_username = useRef<HTMLInputElement>(null);
 
   const [loginErrorMsg, setLoginErrorMessage] = useState<string>("");
 
-  useEffect(() => {
-    // If already logged in , redirect to /
-    if (isLoggedIn) {
-      void navigate({
-        to: "/",
-        replace: true,
-      });
-    }
-  }, [isLoggedIn, navigate]);
+//   useEffect(() => {
+//     // If already logged in , redirect to /
+//     if (isLoggedIn) {
+//       void navigate({
+//         to: "/",
+//         replace: true,
+//       });
+//     }
+//   }, [isLoggedIn, navigate]);
+
 
   const {mutate:userLogin, isLoading} = useMutation({
     mutationFn: async (e: React.FormEvent<HTMLFormElement>) => {
@@ -54,14 +55,14 @@ export const LoginPage = () => {
       console.error(error)
       setLoginErrorMessage(error.errors[0].message) 
     },
-  }, 
-)
+  })
+
 
   return (
     <div className="flex items-center justify-center min-h-screen">
       <div className="login-container w-96 p-8">
         <h1 className="text-3xl font-semibold text-center mb-6">
-          Task Tracker Login
+          Kanban Board Login
         </h1>
         <form onSubmit={(e)=>void userLogin(e)}>
           <p className="text-red-500">{loginErrorMsg}</p>

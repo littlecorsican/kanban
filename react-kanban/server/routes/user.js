@@ -1,0 +1,11 @@
+const express=require('express')
+const router=express.Router()
+
+router.get('/login', function (req, res) {
+    models.User.findAll().then((response)=>console.log(response))
+    
+
+    res.send('Hello World');
+})
+
+module.exports = router
