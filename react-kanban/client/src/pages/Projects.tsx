@@ -3,9 +3,12 @@ import { useQuery } from "@tanstack/react-query";
 
 export default function Projects() {
 
-    const { data, status } = useQuery("projects", async()=>{
-        const res = await fetch("https://jsonplaceholder.typicode.com/users");
-        return res.json();
+    const { data:projects, status, error, isLoading } = useQuery({ 
+        queryKey: ['projects'],
+        queryFn: async() => {
+            const res = await fetch("/projects");
+            return res.json();
+        }
     });
 
     return (
