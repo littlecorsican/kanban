@@ -5,32 +5,27 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Layout from "./pages/Layout";
-// import Home from "./pages/Home";
-import {
-  QueryClient,
-  QueryClientProvider,
-  useQuery,
-} from 'react-query';
-
-const queryClient = new QueryClient();
+import Home from "./pages/Home";
+import NoPage from "./pages/NoPage";
+import Task from "./pages/Task";
+import Projects from "./pages/Projects";
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
   <React.StrictMode>
-    <QueryClientProvider client={queryClient}>
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<App />} />
-          {/* <Route path="blogs" element={<Blogs />} />
-          <Route path="contact" element={<Contact />} />
-          <Route path="*" element={<NoPage />} /> */}
+          <Route path="home" element={<Home />} />
+          <Route path="projects" element={<Projects />} />
+          <Route path="task/:id" element={<Task />} />
+          <Route path="*" element={<NoPage />} />
         </Route>
       </Routes>
     </BrowserRouter>
-    </QueryClientProvider>
   </React.StrictMode>
 );
 
