@@ -1,6 +1,6 @@
 import { useRef, useEffect, useState } from "react";
 // import { useNavigate } from "@tanstack/router";
-// import { z } from "zod";
+import { z } from "zod";
 import { useMutation } from "@tanstack/react-query";
 
 interface LoginError {
@@ -29,7 +29,7 @@ export default function LoginPage() {
 //   }, [isLoggedIn, navigate]);
 
 
-  const {mutate:userLogin, isLoading} = useMutation({
+  const {mutate:userLogin, isPending:isPending} = useMutation({
     mutationFn: async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       if (!user_username.current || !user_password.current) return;
@@ -47,7 +47,7 @@ export default function LoginPage() {
         password,
       });
 
-      return await login(email, password);
+      //return await login(email, password);
     },
     onError: (error:LoginError) => {
       console.error(error)
@@ -98,8 +98,8 @@ export default function LoginPage() {
           </div>
           <button 
             type="submit" 
-            className={`w-full text-white font-semibold py-2 px-4 rounded-lg ${isLoading ? 'bg-gray-600' : 'bg-blue-600 hover:bg-blue-700'}`}
-            disabled={isLoading}
+            className={`w-full text-white font-semibold py-2 px-4 rounded-lg ${isPending ? 'bg-gray-600' : 'bg-blue-600 hover:bg-blue-700'}`}
+            disabled={isPending}
           >Login</button>
         </form>
       </div>
