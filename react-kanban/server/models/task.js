@@ -14,6 +14,7 @@ module.exports = (sequelize, DataTypes) => {
       this.hasOne(models.User, { as: 'user', foreignKey: 'id', sourceKey: 'assigned_to' });
       this.hasOne(models.Status, { as: 'task_status', foreignKey: 'id', sourceKey: 'status' });
       this.hasOne(models.Type, { as: 'task_type', foreignKey: 'id', sourceKey: 'type' });
+      this.hasOne(models.Project, { as: 'project', foreignKey: 'id', sourceKey: 'belongs_to' });
     }
   }
   Task.init({

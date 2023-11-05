@@ -25,9 +25,11 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       sub_task: {
+        allowNull: true,
         type: Sequelize.BOOLEAN
       },
       belongs_to: {
+        allowNull: false,
         type: Sequelize.INTEGER
       },
       createdAt: {

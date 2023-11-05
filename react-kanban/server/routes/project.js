@@ -3,20 +3,15 @@ const router=express.Router()
 const models = require('../models/index')
 
 router.get('/', function (req, res) {
-    models.Project.findAll().then((response)=>console.log(response))
-
-
-    res.send('Hello World');
+    models.Project.findAll({
+        include: [{ model: models.Task, required: false, as: 'task' }],
+    }).then((response)=>res.send(response))
 })
 
 router.get('/:id', function (req, res) {
     const id = req.params
     console.log("id",id)
-
-    models.Project.findOne({ where: { id } }).then((response)=>console.log(response))
-
-
-    res.send('Hello World');
+    models.Project.findOne({ where: { id }, include: [{ model: models.Task, required: false, as: 'task' }] }).then((response)=>console.log(response))
 })
 
 router.put('/:id', async function (req, res) {

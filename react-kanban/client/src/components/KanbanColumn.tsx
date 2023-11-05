@@ -4,6 +4,8 @@ import KanBanCard from "./KanbanCard";
 
 export interface ColumnProp {
   title: string,
+  description: string,
+  project_manager: number,
   headerColour: string,
   cardData: any;
   description: string

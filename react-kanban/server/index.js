@@ -5,10 +5,12 @@ const router = express.Router()
 const userRoute=require('./routes/user')
 const taskRoute=require('./routes/task')
 const projectRoute=require('./routes/project')
+const statusRoute=require('./routes/status')
 
 app.use('/api/user', userRoute)
 app.use('/api/task', taskRoute)
 app.use('/api/project', projectRoute)
+app.use('/api/status', statusRoute)
 
 // router.use(() => {}); // General middleware
 // router.get('/route1', () => {})
