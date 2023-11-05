@@ -6,6 +6,7 @@ export interface ColumnProp {
   title: string,
   headerColour: string,
   cardData: any;
+  description: string
   columnProps: {
     id: number,
   }

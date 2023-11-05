@@ -43,13 +43,33 @@ export default function Projects() {
         touchSensor
     );
 
-    const { data:projects, status, isError, error, isLoading } = useQuery({ 
+    const { data:projects, isError:isProjectsError, error:projectError, isLoading:isProjectLoading } = useQuery({ 
         queryKey: ['projects'],
         queryFn: async() => {
             const res = await fetch("/projects");
             return res.json();
         }
     });
+
+    const { data:statuses, isError:isStatusError, error:statusError, isLoading:isStatusLoading } = useQuery({ 
+        queryKey: ['projects'],
+        queryFn: async() => {
+            const res = await fetch("/statuses");
+            return res.json();
+        }
+    });
+
+    const columns = isStatusError || isStatusLoading || isProjectsError || isProjectLoading ? null : projects.reduce((prev, value)=>{
+        const { status } = value
+        if (typeof status == "number") {
+            if (status in prev) {
+                prev[status] = [...prev[status], value] 
+                return prev
+            } 
+            prev[status] = [value]
+        }
+        return prev
+    }, {})
 
     function handleDragEnd(e:DragEndEvent) {
         console.log("handleDragEnd",e)
@@ -84,13 +104,14 @@ export default function Projects() {
                 <DndContext onDragEnd={handleDragEnd} sensors={sensors}>
                     <div className="flex space-x-4 bg-gray-100 p-10">
                         {
-                            isLoading ? 'Loading....' : isError ? "Error...." :                             
-                            projects && projects.map((value:any,index:number)=>{
+                            isStatusLoading||isProjectLoading ? 'Loading....' : isProjectsError||isStatusError ? "Error...." :                             
+                            columns && columns.map((value:any,index:number)=>{
                                 return <Column 
                                 key={value.id} 
-                                title={value.title} 
+                                title={value.title}
+                                description={value.description} 
                                 // columnProps={value}
-                                // cardData={tasks} 
+                                cardData={value.tasks} 
                                 // headerColour={headerColour[value.id]}
                                 // CardContent={CardContent}
                                 openModal={(id:number)=>{
@@ -103,7 +124,7 @@ export default function Projects() {
                 </DndContext>
                 <Modal>
                     <div className="absolute">
-
+                        this is modal
                     </div>
                 </Modal>
             </div>
