@@ -42,6 +42,13 @@ export default function Projects() {
         keyboardSensor,
         touchSensor
     );
+    const headerColour: Record<string, string> = {
+        1 : "#3842CD",
+        2 : "#E8DB67",
+        3 : "#67E878",
+        4 : "#E8679B" , 
+        5 : "#66FFFF"    
+    }
 
     const { data:projects, isError:isProjectsError, error:projectError, isLoading:isProjectLoading } = useQuery({ 
         queryKey: ['projects'],
