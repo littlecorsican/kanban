@@ -3,6 +3,8 @@
     background-color: #282c34;
     color: white;
     text-align: center;
+    display: flex;
+    justify-content: space-evenly;
 }
 .nav_item:hover {
     border: 1px solid #fff;

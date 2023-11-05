@@ -5,8 +5,8 @@ export default function Home() {
 
 
   return (
-    <div className="">
-        
+    <div className="p-24">
+        <h2>Dashboard</h2>
     </div>
   );
 };

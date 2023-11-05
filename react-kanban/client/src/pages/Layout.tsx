@@ -20,10 +20,16 @@ export default function Layout({  }) {
   return (
     <div className="flex ">
         <nav className="bg-[#282c34] w-[20%] h-[100vh] min-w-[80px] max-w-[200px]">
+          <div className="nav_item">
+            User <img src="" />
+          </div>
           {
             navItem.map((value,index)=>{
               return <a href={value.url} key={index}>
-                <div className="nav_item">{value.title}</div>
+                <div className="nav_item">
+                  <div className=""><img src="" /></div>
+                  <div className="">{value.title}</div>
+                </div>
               </a>
             })
           }

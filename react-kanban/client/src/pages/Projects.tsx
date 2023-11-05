@@ -18,7 +18,11 @@ export default function Projects() {
 
     return (
     <div className="">
-        
+        {
+            projects && projects.map((value:any,index:number)=>{
+                return <div>{value}</div>
+            })
+        }
     </div>
     );
 };
