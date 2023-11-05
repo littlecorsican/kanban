@@ -4,6 +4,12 @@ import {
   QueryClientProvider,
   useQuery,
 } from 'react-query';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Layout from "./pages/Layout";
+import Home from "./pages/Home";
+import NoPage from "./pages/NoPage";
+import Task from "./pages/Task";
+import Projects from "./pages/Projects";
 const queryClient = new QueryClient();
 
 export default function App() {
@@ -11,10 +17,17 @@ export default function App() {
   
 
   return (
-    <QueryClientProvider client={queryClient}>
-    <div className="">
-      This is App
-    </div>
-    </QueryClientProvider>
+    <BrowserRouter>
+      <QueryClientProvider client={queryClient}>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route index element={<Home />} />
+          <Route path="projects" element={<Projects />} />
+          <Route path="task/:id" element={<Task />} />
+          <Route path="*" element={<NoPage />} />
+        </Route>
+      </Routes></QueryClientProvider>
+    </BrowserRouter>
+    
   );
 };

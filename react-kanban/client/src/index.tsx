@@ -9,23 +9,19 @@ import Home from "./pages/Home";
 import NoPage from "./pages/NoPage";
 import Task from "./pages/Task";
 import Projects from "./pages/Projects";
+import {
+  QueryClient,
+  QueryClientProvider,
+  useQuery,
+} from 'react-query';
+const queryClient = new QueryClient();
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
   <React.StrictMode>
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route index element={<App />} />
-          <Route path="home" element={<Home />} />
-          <Route path="projects" element={<Projects />} />
-          <Route path="task/:id" element={<Task />} />
-          <Route path="*" element={<NoPage />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
+    <App/>
   </React.StrictMode>
 );
 

@@ -1,5 +1,10 @@
 import { useRef, useEffect, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import {
+    QueryClient,
+    QueryClientProvider,
+    useQuery,
+  } from 'react-query';
+  const queryClient = new QueryClient();
 
 export default function Projects() {
 

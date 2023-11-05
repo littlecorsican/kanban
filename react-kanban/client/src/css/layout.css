@@ -1,0 +1,10 @@
+.nav_item {
+    padding: 8px;
+    background-color: #282c34;
+    color: white;
+    text-align: center;
+}
+.nav_item:hover {
+    border: 1px solid #fff;
+    border-radius: 4px;
+}
