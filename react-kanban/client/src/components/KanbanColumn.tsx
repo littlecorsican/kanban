@@ -5,21 +5,20 @@ import KanBanCard from "./KanbanCard";
 export interface ColumnProp {
   title: string,
   description: string,
-  project_manager: number,
+  // project_manager: number,
   headerColour: string,
   cardData: any;
-  description: string
   columnProps: {
     id: number,
   }
-  CardContent: JSX.ElementType
+  // CardContent: JSX.ElementType
   openModal: (id: number) => void
 }
 
 const KanBanColumn = (props:ColumnProp) => {
 
   const { id } = props.columnProps
-  const CardContent = props.CardContent
+  // const CardContent = props.CardContent
 
   return (
     <>
@@ -30,16 +29,17 @@ const KanBanColumn = (props:ColumnProp) => {
           <h2 className={`text-lg font-semibold mb-4 p-2`}
           style={{ background: props.headerColour }}>{props.title}</h2>
           {
-            props.cardData.length > 0 && props.cardData.map((value,index)=>{
+            props.cardData.length > 0 && props.cardData.map((value:any,index:number)=>{
               //console.log('value', value)
               const { id } = value
-              return <KanBanCard 
-                  key={index}  
-                  id={id}
-                  openModal={props.openModal}
-                >
-                  <CardContent {...value} />
-                </KanBanCard>
+              // return <KanBanCard 
+              //     key={index}  
+              //     id={id}
+              //     openModal={props.openModal}
+              //   >
+              //     <CardContent {...value} />
+              //   </KanBanCard>
+              return <div>xxxx</div>
             })
           }
         </div>
