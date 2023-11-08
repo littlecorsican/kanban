@@ -13,21 +13,27 @@ module.exports = {
      * }], {});
     */
      await queryInterface.bulkInsert('statuses', [{
-       title: 'New',
+        id: "1",
+        title: 'New',
       },
       {
+        id: "2",
         title: 'Pending',
       },
       {
+        id: "3",
         title: 'In Progress',
       },
       {
+        id: "4",
         title: 'Done',
       },
       {
+        id: "5",
         title: 'Validation',
       },
       {
+        id: "6",
         title: 'Verified',
       },
     ], {});

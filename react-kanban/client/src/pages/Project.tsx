@@ -76,6 +76,9 @@ export default function Project() {
     useEffect(()=>{
         console.log("statuses", statuses)
     }, [statuses])
+    useEffect(()=>{
+        console.log("columns", columns)
+    }, [statuses])
 
     const columns = isStatusError || isStatusLoading || isProjectsError || isProjectLoading ? null : project.task.reduce((prev:any, value:any)=>{
         const { status } = value
@@ -125,14 +128,16 @@ export default function Project() {
                         {
                             isStatusLoading||isProjectLoading ? 'Loading....' : isProjectsError||isStatusError ? "Error...." :                             
                             statuses && statuses.map((value:any,index:number)=>{
+                                console.log("value", value)
+                                const column = columns[value.id]
                                 return <Column 
                                 key={value.id} 
                                 title={value.title}
                                 description={value.description} 
                                 columnProps={value}
-                                cardData={value.tasks} 
+                                cardData={column} 
                                 headerColour={headerColour[value.id]}
-                                // CardContent={CardContent}
+                                CardContent={CardContent}
                                 openModal={(id:number)=>{
 
                                 }}
@@ -149,3 +154,18 @@ export default function Project() {
             </div>
     );
 };
+
+
+const CardContent=(props: any)=> {
+    const { id, title, due_date } = props
+
+    return <div 
+        className="bg-gray-200 rounded-md p-2 mb-2 shadow-md relative"
+        >
+            <div className="">
+                <div className="p-2">{id}</div>
+                <div className="p-2" >{title}</div>
+            </div>
+            {/* <div>Due Date : {due_date ? due_date.toString() : null}</div> */}
+    </div>
+}
