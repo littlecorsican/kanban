@@ -38,3 +38,40 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 
 
 npx sequelize-cli db:migrate
+
+
+
+const CardContent=(props: Task)=> {
+
+    const { id, title, image, due_date, tags } = props
+
+    const authData_string = localStorage.getItem(DIRECTUS_TOKEN_LOCALSTORAGE_KEY)
+    let access_token = ""
+    if (authData_string !== null) {
+        const authData_JSON = JSON.parse(authData_string) as unknown;
+        access_token = authData_JSON.access_token
+
+    }
+
+    return <div 
+        className="bg-gray-200 rounded-md p-2 mb-2 shadow-md relative"
+        >
+            <div className="">
+                <div className="p-2">{id}</div>
+                <div className="p-2" >{title}</div>
+                <div>
+                    {tags && tags.map((value)=>{
+                        return <div 
+                            className="absolute top-[0] right-[0] m-4 text-white bg-red-600
+                            p-1 rounded font-bold">
+                                {value.toUpperCase()}
+                            </div>
+                    })}
+                </div>
+            </div>
+            {image != null && <div>
+                <img src={`${baseUrl}${image.toString()}?access_token=${access_token}`} />
+                </div>}
+            <div>Due Date : {due_date ? due_date.toString() : null}</div>
+    </div>
+}
