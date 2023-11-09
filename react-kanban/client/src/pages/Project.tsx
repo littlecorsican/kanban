@@ -20,10 +20,12 @@ import {
   } from '@dnd-kit/core';
   import { Oval } from "react-loader-spinner";
   import Column from '../components/KanbanColumn'
+  import { Types } from '../enum/types'
   const queryClient = new QueryClient();
 
 export default function Project() {
 
+    const [openModalData, setOpenModalData] = useState<any>(null)
     const { id } = useParams();
     const keyboardSensor = useSensor(KeyboardSensor)
     const mouseSensor = useSensor(MouseSensor, {
@@ -139,7 +141,11 @@ export default function Project() {
                                 headerColour={headerColour[value.id]}
                                 CardContent={CardContent}
                                 openModal={(id:number)=>{
-
+                                    const data = project.task.find((value: any)=>{
+                                        return value.id == id
+                                    })
+                                    setOpenModalData(data)
+                                    openModal()
                                 }}
                             />
                             })
@@ -148,7 +154,10 @@ export default function Project() {
                 </DndContext>
                 <Modal>
                     <div className="absolute">
-                        this is modal
+                        <div className="p-2" >Title: {openModalData.title}</div>
+                        <div className="p-2" >Description: {openModalData.description}</div>
+                        <div className="p-2" >Type: {openModalData.type}</div>
+
                     </div>
                 </Modal>
             </div>
@@ -157,15 +166,15 @@ export default function Project() {
 
 
 const CardContent=(props: any)=> {
-    const { id, title, due_date } = props
+    const { description, title, type } = props
 
     return <div 
         className="bg-gray-200 rounded-md p-2 mb-2 shadow-md relative"
         >
             <div className="">
-                <div className="p-2">{id}</div>
-                <div className="p-2" >{title}</div>
+                <div className="p-2" >Title: {title}</div>
+                <div className="p-2" >Description: {description}</div>
+                <div className="p-2" >Type: {type}</div>
             </div>
-            {/* <div>Due Date : {due_date ? due_date.toString() : null}</div> */}
     </div>
 }

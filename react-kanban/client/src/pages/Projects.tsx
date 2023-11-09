@@ -3,8 +3,8 @@ import {
     useQuery,
 } from 'react-query';
 import useModal from "../hooks/useModal";
-
-  import { Oval } from "react-loader-spinner";
+import '../css/projects.css'
+import { Oval } from "react-loader-spinner";
 
 
 export default function Projects() {
@@ -17,11 +17,9 @@ export default function Projects() {
         }
     });
 
-    const { openModal, Modal } = useModal();
-
     return (
 
-        <div className="flex p-8">
+        <div className="flex p-8 w-full">
             <Oval
                 height={80}
                 width={80}
@@ -34,22 +32,17 @@ export default function Projects() {
                 strokeWidth={2}
                 strokeWidthSecondary={2}
             />
-                <div className="flex flex-col">
+                <div className="flex flex-col w-full">
                     {
                         !isProjectLoading && !isProjectsError && projects && projects.map((value:any, index:number)=>{
-                            return <a href={`/project/${value.id}`} key={index}><div className="rounded p-12">
-                                <div>{value.title}</div>
-                                <div>{value.description}</div>
-                                <div>By: {value.user.name}</div>
+                            return <a href={`/project/${value.id}`} key={index}><div className="project-item">
+                                <div>Title: {value.title}</div>
+                                <div>Description: {value.description}</div>
+                                <div>Managed by: {value.user.name}</div>
                             </div></a>
                         })
                     }
                 </div>
-                <Modal>
-                    <div className="absolute">
-                        this is modal
-                    </div>
-                </Modal>
             </div>
     );
 };

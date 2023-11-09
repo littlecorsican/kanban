@@ -1,0 +1,10 @@
+.project-item {
+    border: 1px solid black;
+    border-radius: 4px;
+    padding: 12px;
+    margin: 12px;
+}
+
+.project-item:hover {
+    margin : 16px;
+}
