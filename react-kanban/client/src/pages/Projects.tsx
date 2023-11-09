@@ -5,14 +5,14 @@ import {
 import useModal from "../hooks/useModal";
 import '../css/projects.css'
 import { Oval } from "react-loader-spinner";
-
+import { base } from '../constants'
 
 export default function Projects() {
 
     const { data:projects, isError:isProjectsError, error:projectError, isLoading:isProjectLoading } = useQuery({ 
         queryKey: ['projects'],
         queryFn: async() => {
-            const res = await fetch("http://localhost:8081/api/project");
+            const res = await fetch(`${base}/api/project`);
             return res.json();
         }
     });

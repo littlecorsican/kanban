@@ -21,11 +21,16 @@ import {
   import { Oval } from "react-loader-spinner";
   import Column from '../components/KanbanColumn'
   import { Types } from '../enum/types'
+  import { changeStatus } from '../hooks/useChangeStatus'
+  import { useMutation } from 'react-query';
+  import { base } from '../constants'
+
   const queryClient = new QueryClient();
 
 export default function Project() {
 
     const [openModalData, setOpenModalData] = useState<any>(null)
+    const [loading, setLoading] = useState<boolean>(false)
     const { id } = useParams();
     const keyboardSensor = useSensor(KeyboardSensor)
     const mouseSensor = useSensor(MouseSensor, {
@@ -54,12 +59,11 @@ export default function Project() {
         5 : "#66FFFF"    
     }
 
-
-    const { data:project, isError:isProjectsError, error:projectError, isLoading:isProjectLoading } = useQuery({ 
+    const { data:project, isError:isProjectsError, error:projectError, isLoading:isProjectLoading, refetch } = useQuery({ 
         queryKey: ['projects'],
         queryFn: async() => {
-            console.log("id", id)
-            const res = await fetch(`http://localhost:8081/api/project/${id}`);
+            //console.log("id", id)
+            const res = await fetch(`${base}/api/project/${id}`);
             return res.json();
         }
     });
@@ -67,25 +71,25 @@ export default function Project() {
     const { data:statuses, isError:isStatusError, error:statusError, isLoading:isStatusLoading } = useQuery({ 
         queryKey: ['statuses'],
         queryFn: async() => {
-            const res = await fetch("http://localhost:8081/api/status");
+            const res = await fetch(`${base}/api/status`);
             return res.json();
         }
     });
 
-    useEffect(()=>{
-        console.log("project", project, typeof project)
-    }, [project])
-    useEffect(()=>{
-        console.log("statuses", statuses)
-    }, [statuses])
-    useEffect(()=>{
-        console.log("columns", columns)
-    }, [statuses])
+    // useEffect(()=>{
+    //     console.log("project", project, typeof project)
+    // }, [project])
+    // useEffect(()=>{
+    //     console.log("statuses", statuses)
+    // }, [statuses])
+    // useEffect(()=>{
+    //     console.log("columns", columns)
+    // }, [statuses])
 
     const columns = isStatusError || isStatusLoading || isProjectsError || isProjectLoading ? null : project.task.reduce((prev:any, value:any)=>{
         const { status } = value
         if (typeof status == "number") {
-            console.log("prev", prev)
+            //console.log("prev", prev)
             if (status in prev) {
                 prev[status] = [...prev[status], value] 
                 return prev
@@ -95,11 +99,19 @@ export default function Project() {
         return prev
     }, {})
 
-    function handleDragEnd(e:DragEndEvent) {
-        console.log("handleDragEnd",e)
-        if (e.over) {
 
+    async function handleDragEnd(e:DragEndEvent) {
+        setLoading(true)
+        console.log("handleDragEnd",e.over, e.active)
+        const cardToMove = e.active.id
+        const columnToMove = e?.over?.id
+        if (columnToMove) {
+            const result = await changeStatus(cardToMove, columnToMove);
+            console.log(result)
+            refetch()
         }
+
+        setLoading(false)
     }
     
     const { openModal, Modal } = useModal();
@@ -119,7 +131,7 @@ export default function Project() {
                 color="#4fa94d"
                 wrapperStyle={{}}
                 wrapperClass="justify-center z-50 m-auto fixed w-full h-full items-center"
-                visible={isStatusLoading||isProjectLoading}
+                visible={isStatusLoading||isProjectLoading||loading}
                 ariaLabel="oval-loading"
                 secondaryColor="#4fa94d"
                 strokeWidth={2}
@@ -130,7 +142,7 @@ export default function Project() {
                         {
                             isStatusLoading||isProjectLoading ? 'Loading....' : isProjectsError||isStatusError ? "Error...." :                             
                             statuses && statuses.map((value:any,index:number)=>{
-                                console.log("value", value)
+                                //console.log("value", value)
                                 const column = columns[value.id]
                                 return <Column 
                                 key={value.id} 
@@ -154,9 +166,9 @@ export default function Project() {
                 </DndContext>
                 <Modal>
                     <div className="absolute">
-                        <div className="p-2" >Title: {openModalData.title}</div>
-                        <div className="p-2" >Description: {openModalData.description}</div>
-                        <div className="p-2" >Type: {openModalData.type}</div>
+                        <div className="p-2" >Title: {openModalData?.title}</div>
+                        <div className="p-2" >Description: {openModalData?.description}</div>
+                        <div className="p-2" >Type: {openModalData?.type}</div>
 
                     </div>
                 </Modal>

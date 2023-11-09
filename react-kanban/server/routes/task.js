@@ -32,7 +32,6 @@ router.put('/:id', async function (req, res) {
     const result = await models.Task.update({ id, ...req.body })
     console.log(result)
     res.send(result);
-
 })
 
 router.post('/', async function (req, res) {
@@ -42,7 +41,20 @@ router.post('/', async function (req, res) {
     const result = await models.Task.create({ ...req.body })
     console.log(result)
     res.send(result);
-
 })
+
+router.post('/changeStatus', async function (req, res) {
+    
+    console.log(req.body.from, req.body.to)
+    const result = await models.Task.update({ status: req.body.to }, {
+        where: {
+          id: req.body.from,
+        },
+      }
+    )
+    console.log(result)
+    res.send(result);
+})
+
 
 module.exports = router

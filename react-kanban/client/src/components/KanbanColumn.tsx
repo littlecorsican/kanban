@@ -25,7 +25,7 @@ const KanBanColumn = (props:ColumnProp) => {
       <Droppable id={id.toString()}>
         <div className="w-[30vw] bg-white rounded-lg shadow-md p-4 flex flex-col max-w-[350px]">
           <div>Create new card...</div>
-          <div>{props.cardData?.length} cards</div>
+          <div>{props.cardData?.length || 0} cards</div>
           <h2 className={`text-lg font-semibold mb-4 p-2`}
           style={{ background: props.headerColour }}>{props.title}</h2>
           {
