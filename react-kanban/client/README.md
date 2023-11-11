@@ -1,3 +1,15 @@
+# Purpose: Creating a sample project to learn/test Typescript
+## What is this: React SQL nodejs based kanban board for project management
+## How to deploy
+
+1) install all the required modules with npm install
+2) create a database in your sql database called kanban
+3) configure the credentials of your database in server/config/config.json
+4) run sequelize migration with npx sequelize-cli db:migrate
+5) run the seeding with npx sequelize-cli db:seed:all
+6) npm start to run
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

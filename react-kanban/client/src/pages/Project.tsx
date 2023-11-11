@@ -22,8 +22,14 @@ import {
   import Column from '../components/KanbanColumn'
   import { Types } from '../enum/types'
   import { changeStatus } from '../hooks/useChangeStatus'
+  import { createTask } from '../hooks/useCreateTask'
   import { useMutation } from 'react-query';
   import { base } from '../constants'
+  import InputText from '../components/InputText'
+  import TextArea from '../components/TextArea'
+  import DropDownMenu from '../components/DropDownMenu'
+  import { ToastContainer, toast } from 'react-toastify';
+  import 'react-toastify/dist/ReactToastify.css';
 
   const queryClient = new QueryClient();
 
@@ -59,7 +65,7 @@ export default function Project() {
         5 : "#66FFFF"    
     }
 
-    const { data:project, isError:isProjectsError, error:projectError, isLoading:isProjectLoading, refetch } = useQuery({ 
+    const { data:project, isError:isProjectsError, error:projectError, isLoading:isProjectLoading, refetch:reFetchProject } = useQuery({ 
         queryKey: ['projects'],
         queryFn: async() => {
             //console.log("id", id)
@@ -74,6 +80,20 @@ export default function Project() {
             const res = await fetch(`${base}/api/status`);
             return res.json();
         }
+    });
+
+    const { data:users, isError:isUserError, error:userError, isLoading:isUserLoading, refetch:reFetchUsers } = useQuery({ 
+        queryKey: ['users'],
+        enabled: false,
+        queryFn: async() => {
+            const res = await fetch(`${base}/api/user`);
+            let namelist = await res.json()
+            namelist = namelist.map((value: { id:number, name:string })=>{
+                return { id:value.id, title:value.name }
+            });
+            console.log(namelist)
+            return namelist
+        },
     });
 
     // useEffect(()=>{
@@ -108,13 +128,14 @@ export default function Project() {
         if (columnToMove) {
             const result = await changeStatus(cardToMove, columnToMove);
             console.log(result)
-            refetch()
+            reFetchProject()
         }
 
         setLoading(false)
     }
     
     const { openModal, Modal } = useModal();
+    const { openModal:openCreateNewModal, Modal:CreateNewModal, closeModal:closeCreateNewModal } = useModal();
 
     return (
         // <DndContext onDragEnd={handleDragEnd} sensors={sensors}>
@@ -131,12 +152,13 @@ export default function Project() {
                 color="#4fa94d"
                 wrapperStyle={{}}
                 wrapperClass="justify-center z-50 m-auto fixed w-full h-full items-center"
-                visible={isStatusLoading||isProjectLoading||loading}
+                visible={isStatusLoading||isProjectLoading||loading||isUserLoading}
                 ariaLabel="oval-loading"
                 secondaryColor="#4fa94d"
                 strokeWidth={2}
                 strokeWidthSecondary={2}
             />
+                <ToastContainer/>
                 <DndContext onDragEnd={handleDragEnd} sensors={sensors}>
                     <div className="flex space-x-4 bg-gray-100 p-10">
                         {
@@ -159,6 +181,10 @@ export default function Project() {
                                     setOpenModalData(data)
                                     openModal()
                                 }}
+                                openCreateNewModal={async()=>{
+                                    if (!users) await reFetchUsers()
+                                    openCreateNewModal();
+                                }}
                             />
                             })
                         }
@@ -169,9 +195,34 @@ export default function Project() {
                         <div className="p-2" >Title: {openModalData?.title}</div>
                         <div className="p-2" >Description: {openModalData?.description}</div>
                         <div className="p-2" >Type: {openModalData?.type}</div>
-
                     </div>
                 </Modal>
+                <CreateNewModal>
+                    <div className="absolute">
+                        <form onSubmit={async(e)=>{
+                            const result:any = await createTask(e)
+                            const errorMsg:string = result?.message
+                            if (result.success) {
+                                toast(errorMsg, {
+                                    className:"whitespace-pre-line"
+                                })
+                            } else {
+                                toast("Task succesfully created", {
+                                    className:"whitespace-pre-line"
+                                })
+                            }
+                            reFetchProject()
+                            closeCreateNewModal()
+                        }}>
+                            <InputText id="title" label="Title" />
+                            <TextArea id="description" label="Description" />
+                            <DropDownMenu id="type" label="Type" list={statuses} />
+                            <DropDownMenu id="assigned_to" label="Assigned To" list={users} />
+                            <input type="hidden" id="belongs_to" value={id} />
+                            <input type="submit" value="Create" className="cursor-pointer" />
+                        </form>
+                    </div>
+                </CreateNewModal>
             </div>
     );
 };

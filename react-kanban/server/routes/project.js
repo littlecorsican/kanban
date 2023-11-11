@@ -1,6 +1,9 @@
 const express=require('express')
 const router=express.Router()
 const models = require('../models/index')
+const bodyParser = require('body-parser');
+router.use(bodyParser.urlencoded({ extended: true }));
+router.use(bodyParser.json());
 
 router.get('/', function (req, res) {
     models.Project.findAll(
@@ -51,11 +54,24 @@ router.put('/:id', async function (req, res) {
 
 router.post('/', async function (req, res) {
     
-    console.log(req.body)
-    console.log({ ...req.body })
-    const result = await models.Project.create({ ...req.body })
-    console.log(result)
-    res.send(result);
+    console.log("xxxx1", req.body)
+    console.log("xxxx2",{ ...req.body })
+    try {
+        const result = await models.Project.create({ ...req.body })
+        console.log("result", result)
+        res.send({  
+            success: 1,
+            message: "row inserted"
+        });
+    }
+    catch(err) {
+        res.send({  
+            success: 0,
+            message: err.toString()
+        });
+    }
+
+
 
 })
 

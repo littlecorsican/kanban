@@ -38,9 +38,20 @@ router.post('/', async function (req, res) {
     
     console.log(req.body)
     console.log({ ...req.body })
-    const result = await models.Task.create({ ...req.body })
-    console.log(result)
-    res.send(result);
+    try {
+        const result = await models.Task.create({ ...req.body })
+        console.log("result", result)
+        res.send({  
+            success: 1,
+            message: "row inserted"
+        });
+    }
+    catch(err) {
+        res.send({  
+            success: 0,
+            message: err.toString()
+        });
+    }
 })
 
 router.post('/changeStatus', async function (req, res) {
