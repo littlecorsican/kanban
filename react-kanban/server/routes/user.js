@@ -29,14 +29,46 @@ router.put('/:id', async function (req, res) {
     res.send(result);
 })
 
-router.post('/', async function (req, res) {
+// router.post('/', async function (req, res) {
+    
+//     console.log(req.body)
+//     const result = await models.User.create({ ...req.body })
+//     console.log(result)
+//     res.send(result);
+// })
+
+router.post('/login', async function (req, res) {
+    
+    console.log(req.body)
+    const email = req.body.email
+    const password = req.body.password  // password login page passes
+    models.User.findOne({ where: { email } }).then((user)=>{
+        console.log(user)
+        if (!user) {
+            res.status(401).send({
+                success: 0,
+                message: "User not found"
+            })
+        }
+        console.log("password", user.password) // password from database
+        bcrypt.compare(req.body.password, 'superSecret', function(err, res) {
+            if(req.body.password != user.password){
+              res.json({success: 0, message: 'passwords do not match'});
+            } else {
+              // Send JWT
+            }
+        });
+    })
+    // console.log(user)
+    // res.send("");
+})
+
+router.post('/register', async function (req, res) {
     
     console.log(req.body)
     const result = await models.User.create({ ...req.body })
     console.log(result)
     res.send(result);
 })
-
-
 
 module.exports = router
