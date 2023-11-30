@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useState, createContext, useContext  } from "react";
 import {
   QueryClient,
   QueryClientProvider,
@@ -12,8 +12,18 @@ import Task from "./pages/Task";
 import Projects from "./pages/Projects";
 import Project from "./pages/Project";
 import { Oval } from "react-loader-spinner";
+import { boolean } from "zod";
 
 const queryClient = new QueryClient();
+export type GlobalContent = {
+  loading: boolean,
+  setLoading:(c: boolean) => void
+}
+const GlobalContext = createContext<GlobalContent>({
+  loading: false,
+  setLoading: () => {},
+});
+
 
 export default function App() {
 
@@ -33,16 +43,22 @@ export default function App() {
         strokeWidth={2}
         strokeWidthSecondary={2}
       />
-      <QueryClientProvider client={queryClient}>
-      <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route index element={<Home />} />
-          <Route path="projects" element={<Projects />} />
-          <Route path="project/:id" element={<Project />} />
-          <Route path="task/:id" element={<Task />} />
-          <Route path="*" element={<NoPage />} />
-        </Route>
-      </Routes></QueryClientProvider>
+      <GlobalContext.Provider value={{
+        loading,
+        setLoading,
+      }}>
+        <QueryClientProvider client={queryClient}>
+          <Routes>
+            <Route path="/" element={<Layout />}>
+              <Route index element={<Home />} />
+              <Route path="projects" element={<Projects />} />
+              <Route path="project/:id" element={<Project />} />
+              <Route path="task/:id" element={<Task />} />
+              <Route path="*" element={<NoPage />} />
+            </Route>
+          </Routes>
+        </QueryClientProvider>
+      </GlobalContext.Provider>
     </BrowserRouter>
     
   );
