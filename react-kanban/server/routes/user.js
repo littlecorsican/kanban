@@ -5,6 +5,9 @@ router.use(bodyParser.urlencoded({ extended: true }));
 router.use(bodyParser.json());
 // router.use(bodyParser.raw());
 const models = require('../models/index')
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+require('dotenv').config()
 
 router.get('/:id', function (req, res) {
     const id = req.params
@@ -38,12 +41,13 @@ router.put('/:id', async function (req, res) {
 // })
 
 router.post('/login', async function (req, res) {
-    
+    console.log(process.env.JWTSECRET) 
     console.log(req.body)
     const email = req.body.email
     const password = req.body.password  // password login page passes
+    
     models.User.findOne({ where: { email } }).then((user)=>{
-        console.log(user)
+        console.log("user", user)
         if (!user) {
             res.status(401).send({
                 success: 0,
@@ -51,24 +55,69 @@ router.post('/login', async function (req, res) {
             })
         }
         console.log("password", user.password) // password from database
-        bcrypt.compare(req.body.password, 'superSecret', function(err, res) {
-            if(req.body.password != user.password){
-              res.json({success: 0, message: 'passwords do not match'});
-            } else {
-              // Send JWT
+        console.log("email", user.email) // password from database
+        bcrypt.compare(req.body.password, user.password, function(err, result) {
+            console.log("result", result)
+            if(!result){
+                res.status(401).send({
+                    success: 0,
+                    message: "Passwords do not match"
+                })
             }
+
+            let data = { 
+                time: new Date(), 
+                email: email, 
+            }
+            const token = jwt.sign(data, process.env.JWTSECRET);
+            res.status(200).send({
+                success: 1,
+                message: "",
+                access_token: token
+            })
+            
         });
     })
-    // console.log(user)
-    // res.send("");
 })
 
 router.post('/register', async function (req, res) {
     
     console.log(req.body)
-    const result = await models.User.create({ ...req.body })
-    console.log(result)
-    res.send(result);
+    const email = req.body.email
+    // CHECK IF USER EXSISTS
+    models.User.findOne({ where: { email } }).then((user)=>{
+        console.log("user", user)
+        if (user) {
+            res.status(401).send({
+                success: 0,
+                message: "Email has already been registered"
+            })
+        } else {
+            // GENERATE HASH FROM PASSWORD
+            bcrypt.genSalt(parseInt(process.env.SALTROUNDS), function(err, salt) {
+                console.log("salt", salt, err)
+                bcrypt.hash(req.body.password, salt, async function(err, hash) {
+                    console.log("hash", hash, err)
+                    const result = await models.User.create({ ...req.body, password: hash, rank: 1 })
+                    console.log("result", result)
+                    if (result) {
+                        res.status(200).send({
+                            success: 1,
+                            message: "Register success"
+                        })
+                    }
+                    res.status(401).send({
+                        success: 0,
+                        message: "Registeration failed"
+                    })
+                });
+            });
+        }
+    });
+
+    // const result = await models.User.create({ ...req.body })
+    // console.log(result)
+    // res.send(result);
 })
 
 module.exports = router

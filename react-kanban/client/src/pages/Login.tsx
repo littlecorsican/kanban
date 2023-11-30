@@ -47,13 +47,18 @@ export default function LoginPage() {
         password,
       });
 
-      //return await login(email, password);
+      return await login(email, password);
     },
     onError: (error:LoginError) => {
       console.error(error)
       setLoginErrorMessage(error.errors[0].message) 
     },
   })
+
+  const login=(email:string, password:string)=>{
+
+    
+  }
 
 
   return (
