@@ -15,6 +15,7 @@ export default function LoginPage() {
   // const navigate = useNavigate();
 
   const user_password = useRef<HTMLInputElement>(null);
+  const user_repassword = useRef<HTMLInputElement>(null);
   const user_username = useRef<HTMLInputElement>(null);
 
   const [loginErrorMsg, setLoginErrorMessage] = useState<string>("");
@@ -30,17 +31,19 @@ export default function LoginPage() {
 //   }, [isLoggedIn, navigate]);
 
 
-  const {mutate:userLogin, isPending:isPending} = useMutation({
+  const {mutate:userRegistration, isPending:isPending} = useMutation({
     mutationFn: async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-      if (!user_username.current || !user_password.current) return;
+      if (!user_username.current || !user_password.current || !user_repassword.current) return;
   
       const email: string = user_username.current.value;
       const password: string = user_password.current.value;
+      const repassword: string = user_repassword.current.value;
   
       const authInputSchema = z.object({
         email: z.string().email(),
         password: z.string().min(6),
+        repassword: z.string().min(6),
       });
   
       authInputSchema.parse({
@@ -48,7 +51,7 @@ export default function LoginPage() {
         password,
       });
 
-      return await login(email, password);
+      return await register(email, password, repassword);
     },
     onError: (error:LoginError) => {
       console.error(error)
@@ -56,13 +59,13 @@ export default function LoginPage() {
     },
   })
 
-  const login=async(email:string, password:string)=>{
+  const register=async(email:string, password:string, repassword:string)=>{
     const response = await fetch(`${base}/api/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ email: email, password: password }),
+      body: JSON.stringify({ email: email, password: password, repassword: repassword }),
     });
     if (!response.ok) {
         return {
@@ -82,9 +85,9 @@ export default function LoginPage() {
     <div className="flex items-center justify-center min-h-screen">
       <div className="login-container w-96 p-8">
         <h1 className="text-3xl font-semibold text-center mb-6">
-          Kanban Board Login
+          Kanban Board Registration
         </h1>
-        <form onSubmit={(e)=>void userLogin(e)}>
+        <form onSubmit={(e)=>void userRegistration(e)}>
           <p className="text-red-500">{loginErrorMsg}</p>
           <div className="mb-4">
             <label
@@ -114,6 +117,22 @@ export default function LoginPage() {
               id="password"
               name="password"
               ref={user_password}
+              className="w-full border px-4 py-2 rounded-lg focus:ring focus:ring-blue-200"
+              required
+            />
+          </div>
+          <div className="mb-4">
+            <label
+              htmlFor="repassword"
+              className="block text-gray-700 font-semibold"
+            >
+              Password
+            </label>
+            <input
+              type="password"
+              id="repassword"
+              name="repassword"
+              ref={user_repassword}
               className="w-full border px-4 py-2 rounded-lg focus:ring focus:ring-blue-200"
               required
             />
