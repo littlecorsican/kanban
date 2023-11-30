@@ -19,7 +19,7 @@ export type GlobalContent = {
   loading: boolean,
   setLoading:(c: boolean) => void
 }
-const GlobalContext = createContext<GlobalContent>({
+export const GlobalContext = createContext<GlobalContent>({
   loading: false,
   setLoading: () => {},
 });

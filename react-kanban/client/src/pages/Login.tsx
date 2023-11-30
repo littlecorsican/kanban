@@ -1,8 +1,9 @@
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useState, useContext } from "react";
 // import { useNavigate } from "@tanstack/router";
 import { z } from "zod";
 import { useMutation } from "@tanstack/react-query";
 import { base } from '../constants'
+import { GlobalContext } from "../App";
 
 interface LoginError {
   errors: {
@@ -13,6 +14,7 @@ interface LoginError {
 export default function LoginPage() {
 
   // const navigate = useNavigate();
+  const global_context = useContext(GlobalContext)
 
   const user_password = useRef<HTMLInputElement>(null);
   const user_username = useRef<HTMLInputElement>(null);
@@ -48,7 +50,7 @@ export default function LoginPage() {
         password,
       });
 
-      return await login(email, password);
+      await login(email, password);
     },
     onError: (error:LoginError) => {
       console.error(error)
@@ -57,6 +59,7 @@ export default function LoginPage() {
   })
 
   const login=async(email:string, password:string)=>{
+    global_context.setLoading(true);
     const response = await fetch(`${base}/api/login`, {
       method: 'POST',
       headers: {
@@ -64,15 +67,16 @@ export default function LoginPage() {
       },
       body: JSON.stringify({ email: email, password: password }),
     });
+    global_context.setLoading(false);
     if (!response.ok) {
         return {
-            success: false,
-            message: "error"
+          success: false,
+          message: "error"
         }
     }
     return {
-        success: true,
-        message: response.json()
+      success: true,
+      message: response.json()
     }
 
   }
