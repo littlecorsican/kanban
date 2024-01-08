@@ -30,8 +30,9 @@ import {
   import DropDownMenu from '../components/DropDownMenu'
   import { ToastContainer, toast } from 'react-toastify';
   import 'react-toastify/dist/ReactToastify.css';
+import { checkAuth } from '../utils/checkAuth'
 
-  const queryClient = new QueryClient();
+const queryClient = new QueryClient();
 
 export default function Project() {
 

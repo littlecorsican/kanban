@@ -13,23 +13,12 @@ interface LoginError {
 
 export default function LoginPage() {
 
-  // const navigate = useNavigate();
   const global_context = useContext(GlobalContext)
 
   const user_password = useRef<HTMLInputElement>(null);
   const user_username = useRef<HTMLInputElement>(null);
 
   const [loginErrorMsg, setLoginErrorMessage] = useState<string>("");
-
-//   useEffect(() => {
-//     // If already logged in , redirect to /
-//     if (isLoggedIn) {
-//       void navigate({
-//         to: "/",
-//         replace: true,
-//       });
-//     }
-//   }, [isLoggedIn, navigate]);
 
 
   const {mutate:userLogin, isPending:isPending} = useMutation({
@@ -68,16 +57,19 @@ export default function LoginPage() {
       body: JSON.stringify({ email: email, password: password }),
     });
     global_context.setLoading(false);
+    console.log('response', response)
+    const response2 = await response.json()
+    console.log('response2', response2)
     if (!response.ok) {
         return {
           success: false,
           message: "error"
         }
     }
-    return {
-      success: true,
-      message: response.json()
-    }
+
+    // LOGIN SUCCESS
+    // ADD ACCESS TOKEN TO LOCAL STORAGE
+    const access_token = response2.access_token
 
   }
 
