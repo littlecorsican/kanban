@@ -1,4 +1,4 @@
-import { ReactNode, useEffect } from "react";
+import { ReactElement, ReactNode, useEffect } from "react";
 import {useDroppable} from '@dnd-kit/core';
 import KanBanCard from "./KanbanCard";
 
@@ -7,7 +7,9 @@ export interface ColumnProp {
   description: string,
   // project_manager: number,
   headerColour: string,
-  cardData: any;
+  cardData: {
+    id: number
+  }[];
   columnProps: {
     id: number,
   }
@@ -30,7 +32,9 @@ const KanBanColumn = (props:ColumnProp) => {
           <h2 className={`text-lg font-semibold mb-4 p-2`}
           style={{ background: props.headerColour }}>{props.title}</h2>
           {
-            props.cardData?.length > 0 && props.cardData.map((value:any,index:number)=>{
+            props.cardData?.length > 0 && props.cardData.map((value:{
+              id: number
+            },index:number)=>{
               //console.log('value', value)
               const { id } = value
               return <KanBanCard 

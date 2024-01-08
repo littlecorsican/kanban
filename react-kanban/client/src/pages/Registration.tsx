@@ -4,6 +4,7 @@ import { z } from "zod";
 import { useMutation } from "@tanstack/react-query";
 import { base } from '../constants'
 import { GlobalContext } from "../App";
+import { useNavigate } from "react-router-dom";
 
 interface LoginError {
   errors: {
@@ -15,23 +16,13 @@ export default function LoginPage() {
 
   // const navigate = useNavigate();
   const global_context = useContext(GlobalContext)
+  const navigate = useNavigate();
 
   const user_password = useRef<HTMLInputElement>(null);
   const user_repassword = useRef<HTMLInputElement>(null);
   const user_username = useRef<HTMLInputElement>(null);
 
   const [loginErrorMsg, setLoginErrorMessage] = useState<string>("");
-
-//   useEffect(() => {
-//     // If already logged in , redirect to /
-//     if (isLoggedIn) {
-//       void navigate({
-//         to: "/",
-//         replace: true,
-//       });
-//     }
-//   }, [isLoggedIn, navigate]);
-
 
   const {mutate:userRegistration, isPending:isPending} = useMutation({
     mutationFn: async (e: React.FormEvent<HTMLFormElement>) => {
@@ -53,7 +44,7 @@ export default function LoginPage() {
         password,
       });
 
-      return await register(email, password, repassword);
+      register(email, password, repassword);
     },
     onError: (error:LoginError) => {
       console.error(error)
@@ -72,15 +63,14 @@ export default function LoginPage() {
     });
     global_context.setLoading(false);
     if (!response.ok) {
-        return {
-            success: false,
-            message: "error"
-        }
+      // pop msg registration fail
+      global_context.toast("Registration fail")
     }
-    return {
-        success: true,
-        message: response.json()
-    }
+    // pop msg registration success
+    global_context.toast("Registration success, redirecting to login page...")
+    setTimeout(()=>{
+      navigate("/login");
+    }, 3000)
 
   }
 

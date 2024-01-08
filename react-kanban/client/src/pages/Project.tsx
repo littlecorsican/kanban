@@ -32,8 +32,6 @@ import {
   import 'react-toastify/dist/ReactToastify.css';
 import { checkAuth } from '../utils/checkAuth'
 
-const queryClient = new QueryClient();
-
 export default function Project() {
 
     const [openModalData, setOpenModalData] = useState<any>(null)
@@ -176,7 +174,9 @@ export default function Project() {
                                 headerColour={headerColour[value.id]}
                                 CardContent={CardContent}
                                 openModal={(id:number)=>{
-                                    const data = project.task.find((value: any)=>{
+                                    const data = project.task.find((value: {
+                                        id: number
+                                    })=>{
                                         return value.id == id
                                     })
                                     setOpenModalData(data)
@@ -229,7 +229,11 @@ export default function Project() {
 };
 
 
-const CardContent=(props: any)=> {
+const CardContent=(props: {
+    description: string,
+    title: string,
+    type: string
+})=> {
     const { description, title, type } = props
 
     return <div 

@@ -4,6 +4,7 @@ import { z } from "zod";
 import { useMutation } from "@tanstack/react-query";
 import { base } from '../constants'
 import { GlobalContext } from "../App";
+import { useNavigate } from "react-router-dom";
 
 interface LoginError {
   errors: {
@@ -19,7 +20,8 @@ export default function LoginPage() {
   const user_username = useRef<HTMLInputElement>(null);
 
   const [loginErrorMsg, setLoginErrorMessage] = useState<string>("");
-
+  
+  const navigate = useNavigate();
 
   const {mutate:userLogin, isPending:isPending} = useMutation({
     mutationFn: async (e: React.FormEvent<HTMLFormElement>) => {
@@ -70,9 +72,13 @@ export default function LoginPage() {
     // LOGIN SUCCESS
     // ADD ACCESS TOKEN TO LOCAL STORAGE
     const access_token = response2.access_token
+    global_context.setUser({
+      access_token: access_token
+    })
+    global_context.toast("Login success")
+    navigate("/");
 
   }
-
 
   return (
     <div className="flex items-center justify-center min-h-screen">

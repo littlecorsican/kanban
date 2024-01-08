@@ -64,7 +64,14 @@ export default function Projects() {
             <div className="flex p-8 w-full">
                 <div className="flex flex-col w-full">
                     {
-                        !isProjectLoading && !isProjectsError && projects && projects.map((value:any, index:number)=>{
+                        !isProjectLoading && !isProjectsError && projects && projects.map((value:{
+                            description: string,
+                            title: string,
+                            id: number,
+                            user: {
+                                name: string,
+                            }
+                        }, index:number)=>{
                             return <a href={`/project/${value.id}`} key={index}><div className="project-item">
                                 <div>Title: {value.title}</div>
                                 <div>Description: {value.description}</div>

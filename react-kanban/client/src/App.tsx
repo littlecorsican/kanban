@@ -15,22 +15,31 @@ import Project from "./pages/Project";
 import { Oval } from "react-loader-spinner";
 import { boolean } from "zod";
 import ProtectedRoute from './components/ProtectedRoute'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const queryClient = new QueryClient();
-export type GlobalContent = {
+
+export type GlobalContentType = {
   loading: boolean,
-  setLoading:(c: boolean) => void
+  setLoading:(c: boolean) => void,
+  user: unknown|null,
+  setUser: (user: unknown|null) => void,
+  toast: (text:string) => void,
 }
-export const GlobalContext = createContext<GlobalContent>({
+export const GlobalContext = createContext<GlobalContentType>({
   loading: false,
   setLoading: () => {},
+  user: null,
+  setUser: ()=> {},
+  toast: (text)=> {}
 });
 
 export default function App() {
 
   const [loading, setLoading] = useState<boolean>(false)
+  const [user, setUser] = useState<unknown>(null)
 
-  const user = null
 
 
   return (
@@ -50,6 +59,9 @@ export default function App() {
       <GlobalContext.Provider value={{
         loading,
         setLoading,
+        user,
+        setUser,
+        toast,
       }}>
         <QueryClientProvider client={queryClient}>
           <Routes>
@@ -69,9 +81,8 @@ export default function App() {
               <Route path="task/:id" element={<Task />} />
               <Route path="*" element={<NoPage />} />
             </Route>
-            {/* <Route path="login" element={<Login />} />
-            <Route path="register" element={<Registration />} /> */}
           </Routes>
+          <ToastContainer />
         </QueryClientProvider>
       </GlobalContext.Provider>
     </BrowserRouter>
