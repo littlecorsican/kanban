@@ -1,8 +1,11 @@
 import { useRef, useEffect, useState } from "react";
 import { Outlet, Link } from "react-router-dom";
 import '../css/layout.css';
+import { useNavigate } from "react-router-dom";
 
 export default function Layout({  }) {
+
+  const navigate = useNavigate();
 
   const navItem = [
     {
@@ -16,6 +19,11 @@ export default function Layout({  }) {
       icon: "",
     },
   ]
+
+  const logout=()=>{
+    localStorage.removeItem("user_credentials")
+    navigate("/login")
+  }
 
   return (
     <div className="flex ">
@@ -33,6 +41,9 @@ export default function Layout({  }) {
               </a>
             })
           }
+          <div className="text-center">
+            <button className="nav_item" onClick={logout}>Logout</button>
+          </div>
         </nav>
         <div className="w-full">
           <Outlet />

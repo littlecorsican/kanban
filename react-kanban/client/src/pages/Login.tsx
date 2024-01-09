@@ -51,7 +51,7 @@ export default function LoginPage() {
 
   const login=async(email:string, password:string)=>{
     global_context.setLoading(true);
-    const response = await fetch(`${base}/api/login`, {
+    const response = await fetch(`${base}/api/user/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
