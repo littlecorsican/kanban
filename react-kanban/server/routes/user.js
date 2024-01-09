@@ -44,7 +44,6 @@ router.post('/login', async function (req, res) {
     console.log(process.env.JWTSECRET) 
     console.log(req.body)
     const email = req.body.email
-    const password = req.body.password  // password login page passes
     
     models.User.findOne({ where: { email } }).then((user)=>{
         console.log("user", user)
@@ -73,7 +72,9 @@ router.post('/login', async function (req, res) {
             res.status(200).send({
                 success: 1,
                 message: "",
-                access_token: token
+                access_token: token,
+                email: user.email,
+                rank: user.rank
             })
             
         });
@@ -115,9 +116,6 @@ router.post('/register', async function (req, res) {
         }
     });
 
-    // const result = await models.User.create({ ...req.body })
-    // console.log(result)
-    // res.send(result);
 })
 
 module.exports = router
