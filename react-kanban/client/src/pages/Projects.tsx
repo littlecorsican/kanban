@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useState, useContext } from "react";
 import {
     useQuery,
 } from '@tanstack/react-query';
@@ -12,8 +12,11 @@ import { createProject } from '../hooks/useCreateProject'
 import InputText from '../components/InputText'
 import TextArea from '../components/TextArea'
 import DropDownMenu from '../components/DropDownMenu'
+import { GlobalContext } from "../App";
 
 export default function Projects() {
+
+    const global_context = useContext(GlobalContext)
 
     const { data:projects, isError:isProjectsError, error:projectError, isLoading:isProjectLoading, refetch:refetchProjects } = useQuery({ 
         queryKey: ['projects'],
@@ -38,6 +41,26 @@ export default function Projects() {
     });
 
     const { openModal:openCreateNewModal, Modal:CreateNewModal, closeModal:closeCreateNewModal } = useModal();
+
+    const deleteProject=async(id:number)=>{
+        global_context.setLoading(true)
+        const response = await fetch(`${base}/api/project/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        console.log('response', response)
+        const response2 = await response.json()
+        console.log('response2', response2)
+        if (!response.ok) {
+            toast("Error deleting..")
+        } else {
+            toast("Succesfully deleted")
+        }
+        refetchProjects()
+        global_context.setLoading(false)
+    }
 
     return (
 
@@ -74,11 +97,20 @@ export default function Projects() {
                                 name: string,
                             }
                         }, index:number)=>{
-                            return <a href={`/project/${value.id}`} key={index}><div className="project-item">
-                                <ProjectItem title="Title:" value={value.title} />
-                                <ProjectItem title="Description:" value={value.description} />
-                                <ProjectItem title="Managed By:" value={value.user.name} />
-                            </div></a>
+                            return <div key={index} className="flex flex-row project-outline">
+                                <div style={{ flex:15 }}>
+                                    <a href={`/project/${value.id}`} >
+                                        <div className="project-item">
+                                            <ProjectItem title="Title:" value={value.title} />
+                                            <ProjectItem title="Description:" value={value.description} />
+                                            <ProjectItem title="Managed By:" value={value.user.name} />
+                                        </div>
+                                    </a>
+                                </div>
+                                <div style={{ flex:1 }} className="text-center">
+                                    <button className="text-xl delete-button" onClick={()=>deleteProject(value.id)}>x</button>
+                                </div>
+                            </div>
                         })
                     }
                 </div>

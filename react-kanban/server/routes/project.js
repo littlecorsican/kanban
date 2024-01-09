@@ -52,6 +52,28 @@ router.put('/:id', async function (req, res) {
 
 })
 
+router.delete('/:id', async function (req, res) {
+
+    try {
+        const id = req.params
+        const result = await models.Project.destroy({
+            where: id
+        })
+        console.log(result)
+        res.send({  
+            success: 1,
+            message: "Delete success"
+        });
+    }
+    catch(err) {
+        res.send({  
+            success: 0,
+            message: err.toString()
+        });
+    }
+
+})
+
 router.post('/', async function (req, res) {
     
     console.log("xxxx1", req.body)
