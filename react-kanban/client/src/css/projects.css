@@ -3,8 +3,10 @@
     border-radius: 4px;
     padding: 12px;
     margin: 12px;
+    display: flex;
+    flex-direction: column;
 }
 
 .project-item:hover {
-    margin : 16px;
+    background-color: beige;
 }

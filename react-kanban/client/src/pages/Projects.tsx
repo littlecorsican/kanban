@@ -59,7 +59,9 @@ export default function Projects() {
                 <button onClick={async()=>{
                     if (!users) await reFetchUsers()
                     openCreateNewModal()
-                }}>Create New Project</button>
+                }}
+                className="text-center text-slate-800 border-slate-600 rounded border px-4 py-6 hover:bg-slate-700 hover:text-slate-100"
+                >Create New Project</button>
             </div>
             <div className="flex p-8 w-full">
                 <div className="flex flex-col w-full">
@@ -73,9 +75,9 @@ export default function Projects() {
                             }
                         }, index:number)=>{
                             return <a href={`/project/${value.id}`} key={index}><div className="project-item">
-                                <div>Title: {value.title}</div>
-                                <div>Description: {value.description}</div>
-                                <div>Managed by: {value.user.name}</div>
+                                <ProjectItem title="Title:" value={value.title} />
+                                <ProjectItem title="Description:" value={value.description} />
+                                <ProjectItem title="Managed By:" value={value.user.name} />
                             </div></a>
                         })
                     }
@@ -108,3 +110,11 @@ export default function Projects() {
         </div>
     );
 };
+
+
+function ProjectItem(props: {title: string, value: string}) {
+    return <div className="flex">
+        <div className="text-style-1 basis-1/4">{props.title}</div> 
+        <div className="text-style-2 basis-1/2">{props.value}</div> 
+    </div>
+}
