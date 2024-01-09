@@ -23,24 +23,19 @@ const queryClient = new QueryClient();
 export type GlobalContentType = {
   loading: boolean,
   setLoading:(c: boolean) => void,
-  user: unknown|null,
-  setUser: (user: unknown|null) => void,
   toast: (text:string) => void,
 }
 export const GlobalContext = createContext<GlobalContentType>({
   loading: false,
   setLoading: () => {},
-  user: null,
-  setUser: ()=> {},
   toast: (text)=> {}
 });
 
 export default function App() {
 
   const [loading, setLoading] = useState<boolean>(false)
-  const [user, setUser] = useState<unknown>(null)
-
-
+  const [user, setUser] = useState<unknown|null>(localStorage.getItem('user_credentials'))
+  
 
   return (
     <BrowserRouter>
@@ -59,8 +54,6 @@ export default function App() {
       <GlobalContext.Provider value={{
         loading,
         setLoading,
-        user,
-        setUser,
         toast,
       }}>
         <QueryClientProvider client={queryClient}>

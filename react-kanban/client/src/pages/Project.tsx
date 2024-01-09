@@ -3,7 +3,7 @@ import {
     QueryClient,
     QueryClientProvider,
     useQuery,
-} from 'react-query';
+} from '@tanstack/react-query';
 import { useParams } from "react-router-dom";
 import useModal from "../hooks/useModal";
 // import { useQuery } from "@tanstack/react-query";
@@ -30,7 +30,6 @@ import {
   import DropDownMenu from '../components/DropDownMenu'
   import { ToastContainer, toast } from 'react-toastify';
   import 'react-toastify/dist/ReactToastify.css';
-import { checkAuth } from '../utils/checkAuth'
 
 export default function Project() {
 

@@ -71,10 +71,8 @@ export default function LoginPage() {
 
     // LOGIN SUCCESS
     // ADD ACCESS TOKEN TO LOCAL STORAGE
-    const access_token = response2.access_token
-    global_context.setUser({
-      access_token: access_token
-    })
+    console.log("response2.toString()", JSON.stringify(response2))
+    localStorage.setItem("user_credentials",JSON.stringify(response2))
     global_context.toast("Login success")
     navigate("/");
 

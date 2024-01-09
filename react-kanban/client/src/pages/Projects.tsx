@@ -1,7 +1,7 @@
 import { useRef, useEffect, useState } from "react";
 import {
     useQuery,
-} from 'react-query';
+} from '@tanstack/react-query';
 import useModal from "../hooks/useModal";
 import '../css/projects.css'
 import { Oval } from "react-loader-spinner";
