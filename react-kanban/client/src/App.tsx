@@ -3,7 +3,7 @@ import {
   QueryClient,
   QueryClientProvider,
 } from '@tanstack/react-query';
-import { BrowserRouter, Routes, Route  } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
 import Layout from "./pages/Layout";
 import Home from "./pages/Home";
 import NoPage from "./pages/NoPage";
@@ -24,18 +24,25 @@ export type GlobalContentType = {
   loading: boolean,
   setLoading:(c: boolean) => void,
   toast: (text:string) => void,
+  user: string|null,
+  setUser: (user:string) => void,
 }
 export const GlobalContext = createContext<GlobalContentType>({
   loading: false,
   setLoading: () => {},
-  toast: (text)=> {}
+  toast: (text)=> {},
+  user: null,
+  setUser: (user)=> {},
 });
 
 export default function App() {
 
   const [loading, setLoading] = useState<boolean>(false)
-  const [user, setUser] = useState<unknown|null>(localStorage.getItem('user_credentials'))
-  
+  const [user, setUser] = useState<string|null>(localStorage.getItem('user_credentials'))
+
+  useEffect(()=>{
+    console.log("user", user)
+  },[user])
 
   return (
     <BrowserRouter>
@@ -55,18 +62,20 @@ export default function App() {
         loading,
         setLoading,
         toast,
+        user,
+        setUser,
       }}>
         <QueryClientProvider client={queryClient}>
           <Routes>
             <Route path="/" element={<Layout />}>
               <Route index element={
-                <ProtectedRoute user={user} redirectPath="/login">
+                <ProtectedRoute redirectPath="/login">
                   <Home />
                 </ProtectedRoute>}  />
               <Route path="login" element={<Login />} />
               <Route path="register" element={<Registration />} />
               <Route path="projects" element={
-                <ProtectedRoute user={user} redirectPath="/login">
+                <ProtectedRoute redirectPath="/login">
                   <Projects />
                 </ProtectedRoute>} 
               />

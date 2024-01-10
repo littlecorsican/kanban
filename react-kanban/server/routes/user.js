@@ -58,7 +58,7 @@ router.post('/login', async function (req, res) {
         bcrypt.compare(req.body.password, user.password, function(err, result) {
             console.log("result", result)
             if(!result){
-                res.status(401).send({
+                return res.status(401).send({
                     success: 0,
                     message: "Passwords do not match"
                 })
@@ -116,6 +116,25 @@ router.post('/register', async function (req, res) {
         }
     });
 
+})
+
+router.post('/verify', async function (req, res) {
+    console.log(process.env.JWTSECRET) 
+    console.log(req.body)
+    const access_token = req.body.access_token
+    console.log("access_token", access_token)
+
+    jwt.verify(access_token, process.env.JWTSECRET, (err, user) => {
+        console.log("err", err)
+    
+        if (err) return res.status(403).send({ success: 0, message: "authentication failed" });
+        console.log("user", user)
+    
+        return res.status(200).send({ success: 1, message: "authentication success" });
+        
+
+    })
+    
 })
 
 module.exports = router

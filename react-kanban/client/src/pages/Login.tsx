@@ -41,7 +41,7 @@ export default function LoginPage() {
         password,
       });
 
-      await login(email, password);
+      login(email, password);
     },
     onError: (error:LoginError) => {
       console.error(error)
@@ -63,18 +63,16 @@ export default function LoginPage() {
     const response2 = await response.json()
     console.log('response2', response2)
     if (!response.ok) {
-        return {
-          success: false,
-          message: "error"
-        }
-    }
+      global_context.toast("Password wrong")
+    } else {
 
-    // LOGIN SUCCESS
-    // ADD ACCESS TOKEN TO LOCAL STORAGE
-    console.log("response2.toString()", JSON.stringify(response2))
-    localStorage.setItem("user_credentials",JSON.stringify(response2))
-    global_context.toast("Login success")
-    navigate("/");
+      // LOGIN SUCCESS
+      // ADD ACCESS TOKEN TO LOCAL STORAGE
+      console.log("response2.toString()", JSON.stringify(response2))
+      localStorage.setItem("user_credentials",JSON.stringify(response2))
+      global_context.toast("Login success")
+      navigate("/");
+    }
 
   }
 

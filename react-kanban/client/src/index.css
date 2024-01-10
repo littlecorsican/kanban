@@ -24,3 +24,12 @@ code {
 .text-style-2 {
   font-weight: 500;
 }
+
+.close-button {
+  border: 1px solid black;
+  border-radius: 4px;
+  padding: 4px;
+  margin: 4px;
+  width: 49px;
+  height: 49px
+}
