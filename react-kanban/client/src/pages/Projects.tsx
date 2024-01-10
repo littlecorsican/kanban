@@ -13,6 +13,7 @@ import InputText from '../components/InputText'
 import TextArea from '../components/TextArea'
 import DropDownMenu from '../components/DropDownMenu'
 import { GlobalContext } from "../App";
+import { request } from '../utils/helpers'
 
 export default function Projects() {
 
@@ -38,7 +39,6 @@ export default function Projects() {
             const res = await fetch(`${base}/api/user`, {
                 headers: {
                     'Content-Type': 'application/json',
-                    "Authentication": `Bearer`
                 } 
                 });
             let namelist = await res.json()
@@ -54,17 +54,15 @@ export default function Projects() {
 
     const deleteProject=async(id:number)=>{
         global_context.setLoading(true)
-        const response = await fetch(`${base}/api/project/${id}`, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
+        const response:any = await request(`${base}/api/project/${id}`, "DELETE", )
+        // const response = await fetch(`${base}/api/project/${id}`, {
+        //     method: 'DELETE',
+        //     headers: {
+        //         'Content-Type': 'application/json',
                 
-            },
-        });
-        console.log('response', response)
-        const response2 = await response.json()
-        console.log('response2', response2)
-        if (!response.ok) {
+        //     },
+        // });
+        if (!response.success) {
             toast("Error deleting..")
         } else {
             toast("Succesfully deleted")

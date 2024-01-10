@@ -3,6 +3,7 @@ import React, { useState, PropsWithChildren } from 'react';
 import { useMutation } from 'react-query';
 import { base } from '../constants'
 import { z } from "zod";
+import { request } from '../utils/helpers'
 
     //title: string, description:string, type:number, assigned_to:number
     export const createTask = async (e:any) => {
@@ -42,23 +43,35 @@ import { z } from "zod";
             }
         }
 
-        const response = await fetch(`${base}/api/task`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ ...formData }),
-        });
-        if (!response.ok) {
+        const response:any = await request(`${base}/api/task`, "POST", JSON.stringify({ ...formData }))
+        if (response.success) {
+            return {
+                success: true,
+                message: response.json()
+            }
+        } else {
             return {
                 success: false,
                 message: "error"
             }
         }
-        return {
-            success: true,
-            message: response.json()
-        }
+        // const response = await fetch(`${base}/api/task`, {
+        //   method: 'POST',
+        //   headers: {
+        //     'Content-Type': 'application/json',
+        //   },
+        //   body: JSON.stringify({ ...formData }),
+        // });
+        // if (!response.ok) {
+        //     return {
+        //         success: false,
+        //         message: "error"
+        //     }
+        // }
+        // return {
+        //     success: true,
+        //     message: response.json()
+        // }
     };
       
     // export const useCreateTask = (title: string, description:string, type:number, assigned_to:number) => {

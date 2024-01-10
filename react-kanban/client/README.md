@@ -67,6 +67,7 @@ remaining to do
 auto log out when access token fails 
 include access token in request
 - add confirmation modal before delete
+- add something to dashboard
 
 abc123@gmail.com
 123456
