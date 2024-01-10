@@ -165,7 +165,7 @@ export default function Project() {
                                 //console.log("value", value)
                                 const column = columns[value.id]
                                 return <Column 
-                                key={value.id} 
+                                key={value.id}
                                 title={value.title}
                                 description={value.description} 
                                 columnProps={value}

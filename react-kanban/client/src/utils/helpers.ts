@@ -28,7 +28,7 @@ export const request = async(url: string, type: string = "GET", body: string|nul
                 'Content-Type': 'application/json',
                 'Authentication': `Bearer ${access_token}`
             },
-            body: JSON.stringify(body),
+            body: body,
             });
             console.log('response', response)
             const response2 = await response.json()
@@ -41,7 +41,7 @@ export const request = async(url: string, type: string = "GET", body: string|nul
                 'Content-Type': 'application/json',
                 'Authentication': `Bearer ${access_token}`
             },
-            body: JSON.stringify(body),
+            body: body,
             });
             console.log('response', response)
             const response2 = await response.json()
@@ -54,7 +54,7 @@ export const request = async(url: string, type: string = "GET", body: string|nul
                 'Content-Type': 'application/json',
                 'Authentication': `Bearer ${access_token}`
             },
-            body: JSON.stringify(body),
+            body: body,
             });
             console.log('response', response)
             const response2 = await response.json()

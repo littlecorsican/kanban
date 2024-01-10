@@ -36,14 +36,14 @@ router.put('/:id', async function (req, res) {
 
 router.post('/', async function (req, res) {
     
-    console.log(req.body)
-    console.log({ ...req.body })
+    console.log("1111", req.body)
+    console.log("2222", { ...req.body })
     try {
         const result = await models.Task.create({ ...req.body })
         console.log("result", result)
         res.send({  
             success: 1,
-            message: "row inserted"
+            message: "Task created"
         });
     }
     catch(err) {

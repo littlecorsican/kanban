@@ -83,7 +83,7 @@ router.post('/', async function (req, res) {
         console.log("result", result)
         res.send({  
             success: 1,
-            message: "row inserted"
+            message: "Project created"
         });
     }
     catch(err) {

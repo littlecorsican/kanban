@@ -44,17 +44,7 @@ import { request } from '../utils/helpers'
         }
 
         const response:any = await request(`${base}/api/task`, "POST", JSON.stringify({ ...formData }))
-        if (response.success) {
-            return {
-                success: true,
-                message: response.json()
-            }
-        } else {
-            return {
-                success: false,
-                message: "error"
-            }
-        }
+        return response
         // const response = await fetch(`${base}/api/task`, {
         //   method: 'POST',
         //   headers: {
