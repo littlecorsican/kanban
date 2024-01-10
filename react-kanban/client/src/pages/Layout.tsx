@@ -23,6 +23,7 @@ export default function Layout({  }) {
   ]
 
   const logout=()=>{
+    global_context.setUser(null)
     localStorage.removeItem("user_credentials")
     navigate("/login")
   }
@@ -46,6 +47,7 @@ export default function Layout({  }) {
           }
           <div className="text-center">
             {global_context.user !== null && <button className="nav_item" onClick={logout}>Logout</button>}
+            {global_context.user === null && <button className="nav_item"><a href="/register">Register</a></button>}
           </div>
         </nav>
         <div className="w-full">

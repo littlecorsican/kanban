@@ -21,7 +21,12 @@ export default function Projects() {
     const { data:projects, isError:isProjectsError, error:projectError, isLoading:isProjectLoading, refetch:refetchProjects } = useQuery({ 
         queryKey: ['projects'],
         queryFn: async() => {
-            const res = await fetch(`${base}/api/project`);
+            const res = await fetch(`${base}/api/project`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    "Authentication": `Bearer`
+                }
+            });
             return res.json();
         }
     });
@@ -30,7 +35,12 @@ export default function Projects() {
         queryKey: ['users'],
         enabled: false,
         queryFn: async() => {
-            const res = await fetch(`${base}/api/user`);
+            const res = await fetch(`${base}/api/user`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    "Authentication": `Bearer`
+                } 
+                });
             let namelist = await res.json()
             namelist = namelist.map((value: { id:number, name:string })=>{
                 return { id:value.id, title:value.name }
@@ -48,6 +58,7 @@ export default function Projects() {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
+                
             },
         });
         console.log('response', response)

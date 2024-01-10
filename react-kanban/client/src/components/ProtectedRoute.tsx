@@ -1,6 +1,7 @@
-import React, { PropsWithChildren } from 'react'
+import React, { PropsWithChildren , useContext} from 'react'
 import {Navigate, useLocation} from "react-router-dom"
 import { base } from '../constants'
+import { GlobalContext } from "../App";
 
 const ProtectedRoute = ({
     redirectPath = '/login',
@@ -10,6 +11,7 @@ const ProtectedRoute = ({
     children: JSX.Element
   }) => {
 
+    const global_context = useContext(GlobalContext)
     const credentials = localStorage.getItem('user_credentials')
     if (credentials) {
       const credentials_JSON = JSON.parse(credentials)
@@ -25,11 +27,13 @@ const ProtectedRoute = ({
       }).then((response)=>{
         console.log("response", response)
         if (response.success === 0) {
+          global_context.setUser(null)
           localStorage.removeItem("user_credentials")
           document.location.href = "/login"
         }
       }).catch((err)=> {
         console.log("err", err)
+        global_context.setUser(null)
         localStorage.removeItem("user_credentials")
         document.location.href = "/login"
       })

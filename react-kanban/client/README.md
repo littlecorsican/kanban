@@ -63,10 +63,10 @@ sequelize-cli seed:generate --name add-student
 
 
 remaining to do
-- add global loading context
 - request function that 
 auto log out when access token fails 
 include access token in request
 - add confirmation modal before delete
-- fix login 
-- fix authentication
+
+abc123@gmail.com
+123456

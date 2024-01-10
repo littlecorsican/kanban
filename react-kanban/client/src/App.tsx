@@ -25,7 +25,7 @@ export type GlobalContentType = {
   setLoading:(c: boolean) => void,
   toast: (text:string) => void,
   user: string|null,
-  setUser: (user:string) => void,
+  setUser: (user:string|null) => void,
 }
 export const GlobalContext = createContext<GlobalContentType>({
   loading: false,
@@ -41,8 +41,10 @@ export default function App() {
   const [user, setUser] = useState<string|null>(localStorage.getItem('user_credentials'))
 
   useEffect(()=>{
-    console.log("user", user)
-  },[user])
+    const user = localStorage.getItem('user_credentials')
+    console.log("user111", user)
+    setUser(user)
+  },[localStorage.getItem('user_credentials')])
 
   return (
     <BrowserRouter>

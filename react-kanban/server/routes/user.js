@@ -58,24 +58,25 @@ router.post('/login', async function (req, res) {
         bcrypt.compare(req.body.password, user.password, function(err, result) {
             console.log("result", result)
             if(!result){
-                return res.status(401).send({
+                res.status(401).send({
                     success: 0,
                     message: "Passwords do not match"
                 })
-            }
+            } else {
 
-            let data = { 
-                time: new Date(), 
-                email: email, 
+                let data = { 
+                    time: new Date(), 
+                    email: email, 
+                }
+                const token = jwt.sign(data, process.env.JWTSECRET);
+                res.status(200).send({
+                    success: 1,
+                    message: "",
+                    access_token: token,
+                    email: user.email,
+                    rank: user.rank
+                })
             }
-            const token = jwt.sign(data, process.env.JWTSECRET);
-            res.status(200).send({
-                success: 1,
-                message: "",
-                access_token: token,
-                email: user.email,
-                rank: user.rank
-            })
             
         });
     })

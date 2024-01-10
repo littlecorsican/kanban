@@ -70,6 +70,7 @@ export default function LoginPage() {
       // ADD ACCESS TOKEN TO LOCAL STORAGE
       console.log("response2.toString()", JSON.stringify(response2))
       localStorage.setItem("user_credentials",JSON.stringify(response2))
+      global_context.setUser(JSON.stringify(response2))
       global_context.toast("Login success")
       navigate("/");
     }

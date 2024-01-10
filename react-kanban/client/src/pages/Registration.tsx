@@ -29,22 +29,22 @@ export default function LoginPage() {
       e.preventDefault();
       if (!user_username.current || !user_password.current || !user_repassword.current) return;
   
-      const email: string = user_username.current.value;
+      const username: string = user_username.current.value;
       const password: string = user_password.current.value;
       const repassword: string = user_repassword.current.value;
-  
       const authInputSchema = z.object({
-        email: z.string().email(),
+        username: z.string().email(),
         password: z.string().min(6),
         repassword: z.string().min(6),
       });
   
       authInputSchema.parse({
-        email,
+        username,
         password,
+        repassword
       });
 
-      register(email, password, repassword);
+      register(username, password, repassword);
     },
     onError: (error:LoginError) => {
       console.error(error)
@@ -54,7 +54,7 @@ export default function LoginPage() {
 
   const register=async(email:string, password:string, repassword:string)=>{
     global_context.setLoading(true);
-    const response = await fetch(`${base}/api/register`, {
+    const response = await fetch(`${base}/api/user/register`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -64,14 +64,17 @@ export default function LoginPage() {
     global_context.setLoading(false);
     if (!response.ok) {
       // pop msg registration fail
-      global_context.toast("Registration fail")
+      global_context.toast(`Registration fail`)
+    } else {
+      // pop msg registration success
+      global_context.toast("Registration success, redirecting to login page...")
+      setTimeout(()=>{
+        navigate("/login");
+      }, 3000)
     }
-    // pop msg registration success
-    global_context.toast("Registration success, redirecting to login page...")
-    setTimeout(()=>{
-      navigate("/login");
-    }, 3000)
-
+    response.json().then((response_JSON)=>{
+      global_context.toast(response_JSON?.message)
+    })
   }
 
 
@@ -135,7 +138,7 @@ export default function LoginPage() {
             type="submit" 
             className={`w-full text-white font-semibold py-2 px-4 rounded-lg ${isPending ? 'bg-gray-600' : 'bg-blue-600 hover:bg-blue-700'}`}
             disabled={isPending}
-          >Login</button>
+          >Register</button>
         </form>
       </div>
     </div>
