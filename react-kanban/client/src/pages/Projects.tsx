@@ -98,7 +98,7 @@ export default function Projects() {
             <div className="flex p-8 w-full">
                 <div className="flex flex-col w-full">
                     {
-                        !isProjectLoading && !isProjectsError && projects && projects.map((value:{
+                        !isProjectLoading && !isProjectsError && projects && projects.length > 0 && projects.map((value:{
                             description: string,
                             title: string,
                             id: number,
