@@ -18,17 +18,19 @@ import { request } from '../utils/helpers'
 export default function Projects() {
 
     const global_context = useContext(GlobalContext)
+    const credentials = localStorage.getItem('user_credentials')
+    let access_token = ""
+    if (credentials) {
+        access_token = JSON.parse(credentials).access_token
+    }
 
     const { data:projects, isError:isProjectsError, error:projectError, isLoading:isProjectLoading, refetch:refetchProjects } = useQuery({ 
         queryKey: ['projects'],
         queryFn: async() => {
-            const res = await fetch(`${base}/api/project`, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    "Authentication": `Bearer`
-                }
-            });
-            return res.json();
+            global_context.setLoading(true)
+            const res:any = await request(`${base}/api/project`, "GET", )
+            global_context.setLoading(false)
+            return res
         }
     });
 
@@ -36,12 +38,10 @@ export default function Projects() {
         queryKey: ['users'],
         enabled: false,
         queryFn: async() => {
-            const res = await fetch(`${base}/api/user`, {
-                headers: {
-                    'Content-Type': 'application/json',
-                } 
-                });
-            let namelist = await res.json()
+            global_context.setLoading(true)
+            const res:any = await request(`${base}/api/user`, "GET", )
+            let namelist = res
+            global_context.setLoading(false)
             namelist = namelist.map((value: { id:number, name:string })=>{
                 return { id:value.id, title:value.name }
             });

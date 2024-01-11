@@ -5,6 +5,8 @@ router.use(bodyParser.urlencoded({ extended: true }));
 router.use(bodyParser.json());
 // router.use(bodyParser.raw());
 const models = require('../models/index')
+const jwt = require('jsonwebtoken');
+require('dotenv').config()
 
 router.get('/:id', function (req, res) {
 

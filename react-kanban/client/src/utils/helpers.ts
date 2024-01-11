@@ -4,10 +4,12 @@ import { base } from '../constants'
 export const request = async(url: string, type: string = "GET", body: string|null = null) => {
 
     const credentials = localStorage.getItem('user_credentials')
+    console.log("credentials111", credentials)
     let access_token = ""
     if (credentials) {
         access_token = JSON.parse(credentials).access_token
     }
+    console.log("credentials222", access_token)
     
     if (type === "GET") {
         const response = await fetch(url, {

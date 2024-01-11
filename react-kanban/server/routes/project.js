@@ -4,6 +4,23 @@ const models = require('../models/index')
 const bodyParser = require('body-parser');
 router.use(bodyParser.urlencoded({ extended: true }));
 router.use(bodyParser.json());
+const jwt = require('jsonwebtoken');
+require('dotenv').config()
+
+router.use((req, res, next) => {
+    //console.log("req", req)
+    const access_token = req.headers.authentication.split(' ')[1];
+    console.log("access_token", access_token, process.env.JWTSECRET)
+    jwt.verify(access_token, process.env.JWTSECRET, (err, user) => {
+       
+       console.log("err", err)
+       if (err) return res.status(401).send({ success: 0, message: "authentication failed" });
+       console.log("user", user)
+   
+       next()
+    })
+ 
+})
 
 router.get('/', function (req, res) {
     models.Project.findAll(
