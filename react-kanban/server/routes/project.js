@@ -51,6 +51,23 @@ router.get('/', function (req, res) {
     ).then((response)=>res.send(response))
 })
 
+
+router.get('/dashboard', function (req, res) {
+    try {
+        models.Project.count().then((response)=>res.send({  
+            success: 1,
+            data: response
+        }))
+    }
+    catch(err) {
+        res.send({  
+            success: 0,
+            message: err.toString()
+        });
+    }
+})
+
+
 router.get('/:id', function (req, res) {
     const { id } = req.params
     console.log("id",id)
@@ -95,9 +112,7 @@ router.delete('/:id', async function (req, res) {
 })
 
 router.post('/', async function (req, res) {
-    
-    console.log("xxxx1", req.body)
-    console.log("xxxx2",{ ...req.body })
+
     try {
         const result = await models.Project.create({ ...req.body })
         console.log("result", result)

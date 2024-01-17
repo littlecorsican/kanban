@@ -26,6 +26,22 @@ router.use((req, res, next) => {
  
 })
 
+
+router.get('/dashboard', function (req, res) {
+    try {
+        models.Task.count().then((response)=>res.send({  
+            success: 1,
+            data: response
+        }))
+    }
+    catch(err) {
+        res.send({  
+            success: 0,
+            message: err.toString()
+        });
+    }
+})
+
 router.get('/:id', function (req, res) {
 
     const id = req.params

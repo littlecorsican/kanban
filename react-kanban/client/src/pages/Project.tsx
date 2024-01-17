@@ -7,8 +7,6 @@ import {
 import { useParams } from "react-router-dom";
 import useModal from "../hooks/useModal";
 // import { useQuery } from "@tanstack/react-query";
-import Draggable from '../components/Draggable';
-import Droppable from '../components/Droppable';
 import {
     DndContext,
     DragEndEvent,
