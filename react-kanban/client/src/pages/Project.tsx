@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import {
     QueryClient,
     QueryClientProvider,
@@ -18,21 +18,24 @@ import {
     useSensor,
     useSensors,
   } from '@dnd-kit/core';
-  import { Oval } from "react-loader-spinner";
-  import Column from '../components/KanbanColumn'
-  import { Types } from '../enum/types'
-  import { changeStatus } from '../hooks/useChangeStatus'
-  import { createTask } from '../hooks/useCreateTask'
-  import { useMutation } from 'react-query';
-  import { base } from '../constants'
-  import InputText from '../components/InputText'
-  import TextArea from '../components/TextArea'
-  import DropDownMenu from '../components/DropDownMenu'
-  import { ToastContainer, toast } from 'react-toastify';
-  import 'react-toastify/dist/ReactToastify.css';
+import { Oval } from "react-loader-spinner";
+import Column from '../components/KanbanColumn'
+import { Types } from '../enum/types'
+import { changeStatus } from '../hooks/useChangeStatus'
+import { createTask } from '../hooks/useCreateTask'
+import { useMutation } from 'react-query';
+import { base } from '../constants'
+import InputText from '../components/InputText'
+import TextArea from '../components/TextArea'
+import DropDownMenu from '../components/DropDownMenu'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { request } from '../utils/helpers'
+import { GlobalContext } from "../App";
 
 export default function Project() {
 
+    const global_context = useContext(GlobalContext)
     const [openModalData, setOpenModalData] = useState<any>(null)
     const [loading, setLoading] = useState<boolean>(false)
     const { id } = useParams();
@@ -67,8 +70,12 @@ export default function Project() {
         queryKey: ['projects'],
         queryFn: async() => {
             //console.log("id", id)
-            const res = await fetch(`${base}/api/project/${id}`);
-            return res.json();
+            // const res = await fetch(`${base}/api/project/${id}`);
+            // return res.json();
+            global_context.setLoading(true)
+            const res:any = await request(`${base}/api/project/${id}`, "GET", )
+            global_context.setLoading(false)
+            return res
         }
     });
 
